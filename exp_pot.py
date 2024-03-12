@@ -14,8 +14,7 @@ from pydub import AudioSegment
 from exceptions import (OpenAiAccessError, NoTranscriptedVoiceToTextError,
                         FileNotFoundInVoiceFilesDir, HTTPResponseParsingError,
                         AiAccessException)
-import openai.error
-from openai.error import OpenAIError, APIError
+from openai import APIError, OpenAIError
 
 load_dotenv()
 
