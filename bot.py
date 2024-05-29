@@ -84,7 +84,7 @@ async def save_voice_as_mp3(bot: Bot, voice: Voice) -> str:
 
 
 @router.message(F.content_type.in_({'voice', 'video_note'}))
-async def get_text_from_video_note(message: Message, bot: Bot):
+async def speech_to_text(message: Message, bot: Bot):
     '''
     Принимает голосовое или видео сообщение, транскрибирует его в текст,
     затем удаляет скачанный аудио файл.
