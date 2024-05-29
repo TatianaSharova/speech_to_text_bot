@@ -83,42 +83,16 @@ async def save_voice_as_mp3(bot: Bot, voice: Voice) -> str:
     return voice_mp3_path
 
 
-@router.message(F.content_type == 'voice')
-async def get_text_from_voice_message(message: Message, bot: Bot):
+@router.message(F.content_type.in_({'voice', 'video_note'}))
+async def get_text_from_video_note(message: Message, bot: Bot):
     '''
-    Принимает голосовое сообщение, транскрибирует его в текст,
+    Принимает голосовое или видео сообщение, транскрибирует его в текст,
     затем удаляет скачанный аудио файл.
     '''
-    try:
-        voice_path = await save_voice_as_mp3(bot, message.voice)
-    except Exception as error:
-        logging.error(error)
-    try:
-        transcripted_voice_text = await audio_to_text(voice_path)
-    except (PermissionError, json.decoder.JSONDecodeError,
-            APIError, OpenAIError, Exception) as error:
-        transcripted_voice_text = None
-        message_error = error
-        logging.error(error)
-
-    if transcripted_voice_text:
-        await message.reply(text=transcripted_voice_text)
-    else:
-        await message.reply(
-            text=f'Расшифровать голосовое сообщение не удалось. '
-            f'Ошибка: {message_error}'
-        )
-
-    try:
-        os.remove(f'{voice_path}')
-        logging.info('Файл удалён локально.')
-    except FileNotFoundError as error:
-        raise FileNotFoundInSavedFilesDir(f'{error}')
-
-
-@router.message(F.content_type == 'video_note')
-async def get_text_from_video_note(message: Message, bot: Bot):
-    path = await save_video_note(bot, message.video_note)
+    if message.voice:
+        path = await save_voice_as_mp3(bot, message.voice)
+    if message.video_note:
+        path = await get_audio_from_video_note(bot, message.video_note)
 
     try:
         transcripted_voice_text = await audio_to_text(path)
@@ -143,7 +117,7 @@ async def get_text_from_video_note(message: Message, bot: Bot):
         raise FileNotFoundInSavedFilesDir(f'{error}')
 
 
-async def save_video_note(bot: Bot, video: VideoNote):
+async def get_audio_from_video_note(bot: Bot, video: VideoNote):
     '''
     Локально скачивает видеосообщение и сохраняет в формате mp4,
     извлекает аудио из скачанного видео, удаляет скачанное видео и
@@ -173,10 +147,10 @@ async def save_video_note(bot: Bot, video: VideoNote):
         logging.info('Видеофайл удалён локально.')
     except PermissionError as error:
         raise CustomPermissionError(
-            f'Видеофайл не удалён локально: {error}.'
+            f'Видеофайл не удалён: {error}.'
         )
     except FileNotFoundError as error:
-        raise FileNotFoundInSavedFilesDir(f'{error}')
+        raise FileNotFoundInSavedFilesDir(error)
     return audio_path
 
 
