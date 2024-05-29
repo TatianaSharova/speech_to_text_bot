@@ -16,5 +16,6 @@ venv.bak/
 # Test
 test_bot.py
 
-# Voice files
+# Voice and video files
 voice_files/
+video/

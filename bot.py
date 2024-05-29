@@ -7,19 +7,20 @@ import sys
 
 import openai
 from aiogram import Bot, Dispatcher, F, Router
-from aiogram.types import Message, Voice
+from aiogram.types import Message, VideoNote, Voice
 from dotenv import load_dotenv
+from moviepy.editor import VideoFileClip
 from openai.error import APIError, OpenAIError, PermissionError
 from pydub import AudioSegment
 
 from exceptions import (AiAccessException, CustomPermissionError,
-                        FileNotFoundInVoiceFilesDir, HTTPResponseParsingError,
-                        OpenAiAccessError)
+                        CustomValueError, FileNotFoundInSavedFilesDir,
+                        HTTPResponseParsingError, OpenAiAccessError)
 
 load_dotenv()
 
 
-openai.api_key = os.getenv('OPEN_AI_TOKEN')
+openai.api_key = os.getenv('OPENAI_API_KEY')
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 
 router: Router = Router()
@@ -39,7 +40,6 @@ def check_tokens() -> bool:
 async def audio_to_text(file_path: str) -> str:
     '''
     Принимает путь к аудио файлу,
-
     возвращает текст голосового сообщения.
     '''
     logging.info('Начинаем расшифровку аудио.')
@@ -84,7 +84,7 @@ async def save_voice_as_mp3(bot: Bot, voice: Voice) -> str:
 
 
 @router.message(F.content_type == 'voice')
-async def process_voice_message(message: Message, bot: Bot):
+async def get_text_from_voice_message(message: Message, bot: Bot):
     '''
     Принимает голосовое сообщение, транскрибирует его в текст,
     затем удаляет скачанный аудио файл.
@@ -113,7 +113,71 @@ async def process_voice_message(message: Message, bot: Bot):
         os.remove(f'{voice_path}')
         logging.info('Файл удалён локально.')
     except FileNotFoundError as error:
-        raise FileNotFoundInVoiceFilesDir(f'{error}')
+        raise FileNotFoundInSavedFilesDir(f'{error}')
+
+
+@router.message(F.content_type == 'video_note')
+async def get_text_from_video_note(message: Message, bot: Bot):
+    path = await save_video_note(bot, message.video_note)
+
+    try:
+        transcripted_voice_text = await audio_to_text(path)
+    except (PermissionError, json.decoder.JSONDecodeError,
+            APIError, OpenAIError, Exception) as error:
+        transcripted_voice_text = None
+        message_error = error
+        logging.error(error)
+
+    if transcripted_voice_text:
+        await message.reply(text=transcripted_voice_text)
+    else:
+        await message.reply(
+            text=f'Расшифровать голосовое сообщение не удалось. '
+            f'Ошибка: {message_error}'
+        )
+
+    try:
+        os.remove(f'{path}')
+        logging.info('Аудиофайл удалён локально.')
+    except FileNotFoundError as error:
+        raise FileNotFoundInSavedFilesDir(f'{error}')
+
+
+async def save_video_note(bot: Bot, video: VideoNote):
+    '''
+    Локально скачивает видеосообщение и сохраняет в формате mp4,
+    извлекает аудио из скачанного видео, удаляет скачанное видео и
+    возвращает путь к извлеченному аудиофайлу.
+    '''
+    logging.info('Скачиваем видеосообщение.')
+    video_file = await bot.get_file(video.file_id)
+    video_path = f'video/{video.file_unique_id}.mp4'
+    await bot.download_file(video_file.file_path, video_path)
+    logging.info('Видеосообщение успешно скачано. '
+                 'Начинаем извлекать аудио из видео.')
+    try:
+        clip = VideoFileClip(video_path)
+    except ValueError as error:
+        raise CustomValueError(error)
+    audio_path = f'voice_files/voice-{video.file_unique_id}.mp3'
+    try:
+        clip.audio.write_audiofile(audio_path)
+        logging.info('Аудио успешно извлечено.')
+    except ValueError as error:
+        raise CustomValueError(error)
+    finally:
+        clip.close()
+    try:
+        logging.info('Начинаем удаление видеофайла.')
+        os.remove(video_path)
+        logging.info('Видеофайл удалён локально.')
+    except PermissionError as error:
+        raise CustomPermissionError(
+            f'Видеофайл не удалён локально: {error}.'
+        )
+    except FileNotFoundError as error:
+        raise FileNotFoundInSavedFilesDir(f'{error}')
+    return audio_path
 
 
 async def main():

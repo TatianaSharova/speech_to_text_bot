@@ -26,3 +26,4 @@ tqdm==4.66.1
 typing_extensions==4.9.0
 urllib3==2.2.0
 yarl==1.9.4
+moviepy==1.0.3

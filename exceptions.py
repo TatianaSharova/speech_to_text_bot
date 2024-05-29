@@ -2,7 +2,7 @@ class OpenAiAccessError(Exception):
     pass
 
 
-class FileNotFoundInVoiceFilesDir(Exception):
+class FileNotFoundInSavedFilesDir(Exception):
     pass
 
 
@@ -15,4 +15,8 @@ class AiAccessException(Exception):
 
 
 class CustomPermissionError(Exception):
+    pass
+
+
+class CustomValueError(Exception):
     pass
