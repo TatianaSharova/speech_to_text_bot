@@ -18,6 +18,7 @@ TELEGRAM_BOT_TOKEN         - токен вашего телеграм бота
 OPENAI_API_KEY             - ваш токен, полученный от OpenAI
 ```
 **_Создать и активировать виртуальное окружение:_**
+
 Для Linux/macOS:
 ```
 python3 -m venv venv
