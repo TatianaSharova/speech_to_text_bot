@@ -33,11 +33,11 @@ python -m venv venv
 ```
 source venv/Scripts/activate
 ```
-**_Установить зависимости из файла requirements.txt:**_
+**_Установить зависимости из файла requirements.txt:_**
 ```
 pip install -r requirements.txt
 ```
-**_Запустить бот:**_
+**_Запустить бот:_**
 ```
 python bot.py
 ```
