@@ -84,7 +84,7 @@ async def save_voice_as_mp3(bot: Bot, voice: Voice) -> str:
 
 
 @router.message(F.content_type.in_({'voice', 'video_note'}))
-async def speech_to_text(message: Message, bot: Bot):
+async def speech_to_text(message: Message, bot: Bot) -> Message:
     '''
     Принимает голосовое или видео сообщение, транскрибирует его в текст,
     затем удаляет скачанный аудио файл.
@@ -117,7 +117,7 @@ async def speech_to_text(message: Message, bot: Bot):
         raise FileNotFoundInSavedFilesDir(f'{error}')
 
 
-async def get_audio_from_video_note(bot: Bot, video: VideoNote):
+async def get_audio_from_video_note(bot: Bot, video: VideoNote) -> str:
     '''
     Локально скачивает видеосообщение и сохраняет в формате mp4,
     извлекает аудио из скачанного видео, удаляет скачанное видео и
