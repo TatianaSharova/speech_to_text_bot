@@ -1,10 +1,10 @@
 # **Speech to text telegram bot**
 
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
-![OpenAI](https://a11ybadges.com/badge?logo=openai)
-![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)
+[![OpenAI](https://a11ybadges.com/badge?logo=openai)](https://openai.com/)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://core.telegram.org/)
 
-Телеграм бот, который может транскрибировать голосовое или видеосообщение c помощью системы по распознаванию речи Whisper от OpenAI.
+Телеграм бот, который может транскрибировать голосовое или видеосообщение c помощью системы по распознаванию речи Whisper от OpenAI. Бот работает со всеми языками и транскрибирует полученное сообщение на том языке, на котором оно было записано.
 
 ### Локальный запуск бота:
 
@@ -40,6 +40,9 @@ pip install -r requirements.txt
 **_Запустить бот:_**
 ```
 python bot.py
+```
+```
+Если у вас вылетает ошибка PermissionError, включите VPN.
 ```
 
 ### Автор
