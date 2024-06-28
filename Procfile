@@ -1,1 +1,1 @@
-worker: ffdl install; python bot.py
+worker: ffdl install; Y; python bot.py
