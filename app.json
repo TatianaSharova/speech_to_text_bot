@@ -19,6 +19,11 @@
     },
     "TELEGRAM_CHAT_ID": {
       "required": true
+    },
+    "tests": {
+      "scripts": {
+        "test": "flake8"
+      }
     }
   },
   "formation": {
