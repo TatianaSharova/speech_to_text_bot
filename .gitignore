@@ -14,4 +14,4 @@ env.bak/
 venv.bak/
 
 # Test
-test_bot.py
+bot_testversion.py

@@ -1,4 +1,4 @@
-name: SpeechBotWorkflow
+name: Run tests
 
 on:
   push:
@@ -22,3 +22,6 @@ jobs:
     - name: Test with flake8
       run: |
         python -m flake8
+    - name: Pytest tests
+      run: |
+        python -m pytest
