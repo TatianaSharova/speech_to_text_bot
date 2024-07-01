@@ -1,6 +1,6 @@
 # **Speech to text telegram bot**
 
-[![Build Status](https://github.com/TatianaSharova/speech_to_text_bot/workflows/Run20%tests/badge.svg)](https://github.com/TatianaSharova/speech_to_text_bot/actions/workflows/main.yml)
+[![Build Status](https://github.com/TatianaSharova/speech_to_text_bot/workflows/Run-tests/badge.svg)](https://github.com/TatianaSharova/speech_to_text_bot/actions/workflows/main.yml)
 
 
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
