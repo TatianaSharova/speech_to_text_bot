@@ -1,0 +1,33 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+    }
+  ],
+  "env": {
+    "OPENAI_API_KEY": {
+      "required": true
+    },
+    "TELEGRAM_BOT_TOKEN": {
+      "required": true
+    },
+    "TELEGRAM_CHAT_ID": {
+      "required": true
+    }
+  },
+  "formation": {
+    "worker": {
+      "quantity": 1
+    }
+  },
+  "name": "speech_to_text_bot",
+  "scripts": {
+  },
+  "stack": "heroku-22"
+}
