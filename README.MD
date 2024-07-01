@@ -10,6 +10,7 @@
 CD бота настроен на Heroku.
 
 ### Локальный запуск бота:
+--------------------------
 
 **_Склонировать репозиторий к себе_**
 ```
@@ -57,21 +58,22 @@ OPENAI_API_KEY             - ваш токен, полученный от OpenAI
 ```
 
 ### Запуск бота на сервере Heroku и настройка CD:  
+-------------------------------------------------
 
-**_1. Установите [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)_**  
+**_Установите [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)_**  
 
-**_2. После установки войдите в свой аккаунт, для этого введите в терминал:_**  
+**_После установки войдите в свой аккаунт, для этого введите в терминал:_**  
 ```
 heroku login
 ```
-**_3. Создайте новое приложение:_**
+**_Создайте новое приложение:_**
 ```
 cd your_app/
 ```
 ```
 heroku create speechbot
 ```
-**_4. Запушьте ваш код на сервер:_**
+**_Запушьте ваш код на сервер:_**
 ```
 git init
 ```
@@ -84,16 +86,16 @@ git commit -m'my first commit'
 ```
 git push heroku main
 ```
-**_5. Задайте переменные окружения:_**
+**_Задайте переменные окружения:_**
 ```
 heroku config:set TELEGRAM_BOT_TOKEN=токен вашего телеграм бота
 heroku config:set OPENAI_API_KEY=ваш токен, полученный от OpenAI
 ```
-**_6. Устанавливаем ffmpeg на сервер:_**
+**_Устанавливаем ffmpeg на сервер:_**
 ```
 heroku buildpacks:add https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git
 ```
-**_7. Включаем бот:_**
+**_Включаем бот:_**
 ```
 heroku ps:scale worker=1
 ```
