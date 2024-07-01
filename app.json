@@ -21,13 +21,6 @@
       "required": true
     }
   },
-  "environments": {
-    "test": {
-      "scripts": {
-        "test": "flake8"
-      }
-    }
-  },
   "formation": {
     "worker": {
       "quantity": 1
