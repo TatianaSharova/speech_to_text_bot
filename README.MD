@@ -2,11 +2,9 @@
 
 ![.github/workflows/main.yaml](https://github.com/TatianaSharova/speech_to_text_bot/actions/workflows/main.yml/badge.svg)
 
-[![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
-[![OpenAI](https://a11ybadges.com/badge?logo=openai)](https://openai.com/)
-[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://core.telegram.org/)
+Телеграм бот, который может транскрибировать голосовое или видеосообщение c помощью системы по распознаванию речи Whisper от OpenAI. Бот работает со всеми языками и транскрибирует полученное сообщение на том языке, на котором оно было записано.  
 
-Телеграм бот, который может транскрибировать голосовое или видеосообщение c помощью системы по распознаванию речи Whisper от OpenAI. Бот работает со всеми языками и транскрибирует полученное сообщение на том языке, на котором оно было записано.
+**Stack**: Python, Pytest, Aiogram, Asyncio, pydub, Whisper, Github Actions, Heroku.
 
 Настроен CI проекта в GitHub Actions: код проверяется по стандарту PEP8, и выполняются Pytest тесты на проверку доступа к API OpenAI.
 CD бота настроен на Heroku.
@@ -53,6 +51,52 @@ python bot.py
 ```
 Если у вас вылетает ошибка PermissionError, включите VPN.
 ```
+**_Для CI проекта, добавьте в GitHub Actions новый secret:_**
+```
+OPENAI_API_KEY             - ваш токен, полученный от OpenAI
+```
+
+### Запуск бота на сервере Heroku и настройка CD:  
+
+**_1. Установите [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)_**  
+
+**_2. После установки войдите в свой аккаунт, для этого введите в терминал:_**  
+```
+heroku login
+```
+**_3. Создайте новое приложение:_**
+```
+cd your_app/
+```
+```
+heroku create speechbot
+```
+**_4. Запушьте ваш код на сервер:_**
+```
+git init
+```
+```
+git add .
+```
+```
+git commit -m'my first commit'
+```
+```
+git push heroku main
+```
+**_5. Задайте переменные окружения:_**
+```
+heroku config:set TELEGRAM_BOT_TOKEN=токен вашего телеграм бота
+heroku config:set OPENAI_API_KEY=ваш токен, полученный от OpenAI
+```
+**_6. Устанавливаем ffmpeg на сервер:_**
+```
+heroku buildpacks:add https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git
+```
+**_7. Включаем бот:_**
+```
+heroku ps:scale worker=1
+```
 
 ### Автор
-Татьяна Шарова
+[Татьяна Шарова](https://github.com/TatianaSharova)
