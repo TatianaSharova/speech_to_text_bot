@@ -1,5 +1,8 @@
 # **Speech to text telegram bot**
 
+[![Build Status](https://github.com/TatianaSharova/speech_to_text_bot/workflows/SpeechBotWorkflow/badge.svg)](https://github.com/TatianaSharova/speech_to_text_bot/actions/workflows/main.yml)
+
+
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
 [![OpenAI](https://a11ybadges.com/badge?logo=openai)](https://openai.com/)
 [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://core.telegram.org/)
@@ -36,6 +39,10 @@ source venv/Scripts/activate
 **_Установить зависимости из файла requirements.txt:_**
 ```
 pip install -r requirements.txt
+```
+**_Ввести команду в терминал (для установки ffmpeg):_**
+```
+ffdl install
 ```
 **_Запустить бот:_**
 ```
