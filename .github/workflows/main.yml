@@ -24,5 +24,7 @@ jobs:
       run: |
         python -m flake8
     - name: Pytest tests
+      env:
+        openai.api: ${{ secrets.OPENAI_API_TOKEN }}
       run: |
         python -m pytest
