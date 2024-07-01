@@ -1,7 +1,6 @@
 # **Speech to text telegram bot**
 
-[![Build Status](https://github.com/TatianaSharova/speech_to_text_bot/workflows/Run-tests/badge.svg)](https://github.com/TatianaSharova/speech_to_text_bot/actions/workflows/main.yml)
-
+[![.github/workflows/main.yaml](https://github.com/TatianaSharova/speech_to_text_bot/actions/workflows/main.yaml/badge.svg)](https://github.com/TatianaSharova/speech_to_text_bot/actions/workflows/main.yaml)
 
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
 [![OpenAI](https://a11ybadges.com/badge?logo=openai)](https://openai.com/)
