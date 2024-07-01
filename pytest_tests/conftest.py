@@ -3,7 +3,7 @@ import pytest
 
 URL = 'https://api.openai.com/v1/models'
 
-HEADERS = {'Authorization': f'Bearer Token {openai.api_key}'}
+HEADERS = {'Authorization': f'Bearer {openai.api_key}'}
 
 
 @pytest.fixture
