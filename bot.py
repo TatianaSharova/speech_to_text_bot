@@ -83,6 +83,15 @@ async def save_voice_as_mp3(bot: Bot, voice: Voice) -> str:
     return voice_mp3_path
 
 
+@router.message(F.text)
+async def say_hello(message: Message, bot: Bot) -> Message:
+    '''При получении текстового сообщения описывает свои возможности.'''
+    await message.answer(
+        'Я бот, пришли мне голосовое или видеосообщение, '
+        'и я его транскрибирую.'
+    )
+
+
 @router.message(F.content_type.in_({'voice', 'video_note'}))
 async def speech_to_text(message: Message, bot: Bot) -> Message:
     '''
