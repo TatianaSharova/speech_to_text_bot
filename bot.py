@@ -7,7 +7,7 @@ import sys
 
 import openai
 from aiogram import Bot, Dispatcher, F, Router
-from aiogram.types import Message, VideoNote, Voice
+from aiogram.types import Message, VideoNote, Voice, Audio
 from dotenv import load_dotenv
 from moviepy.editor import VideoFileClip
 from openai.error import APIError, OpenAIError, PermissionError
@@ -50,6 +50,16 @@ async def audio_to_text(file_path: str) -> str:
         )
         logging.info(f'Аудио расшифровано. '
                      f'Ответ OpenAI: {transcript}')
+        
+
+        # Сохранение текста в файл
+        output_path = os.path.splitext(file_path)[0] + '.txt'
+        with open(output_path, 'w', encoding='utf-8') as text_file:
+            text_file.write(transcript['text'])
+        logging.info(f'Текст сохранён в файл: {output_path}')
+
+
+
     except PermissionError as error:
         raise CustomPermissionError(f'Доступ сервера к OpenAI запрещён. '
                                     f'Причина: {error}')
@@ -83,6 +93,22 @@ async def save_voice_as_mp3(bot: Bot, voice: Voice) -> str:
     return voice_mp3_path
 
 
+async def save_audio_file(bot: Bot, audio: Audio) -> str:
+    '''
+    Сохраняет аудиофайл, отправленный пользователем, локально.
+    Возвращает путь к сохранённому файлу.
+    '''
+    file = await bot.get_file(audio.file_id)
+    file_path = file.file_path
+    local_path = f'voice_files/audio-{audio.file_unique_id}.mp3'
+
+    await bot.download_file(file_path, destination=local_path)
+    logging.info(f'Аудио успешно скачано.'
+                 f'file path - {local_path}.')
+    return local_path
+
+
+
 @router.message(F.text)
 async def say_hello(message: Message, bot: Bot) -> Message:
     '''При получении текстового сообщения описывает свои возможности.'''
@@ -92,16 +118,18 @@ async def say_hello(message: Message, bot: Bot) -> Message:
     )
 
 
-@router.message(F.content_type.in_({'voice', 'video_note'}))
+@router.message(F.content_type.in_({'voice', 'video_note', 'audio'}))
 async def speech_to_text(message: Message, bot: Bot) -> Message:
     '''
-    Принимает голосовое или видео сообщение, транскрибирует его в текст,
+    Принимает голосовое, видео сообщение или аудиофайл, транскрибирует его в текст,
     затем удаляет скачанный аудио файл.
     '''
     if message.voice:
         path = await save_voice_as_mp3(bot, message.voice)
     if message.video_note:
         path = await get_audio_from_video_note(bot, message.video_note)
+    if message.audio:
+        path = await save_audio_file(bot, message.audio)
 
     try:
         transcripted_voice_text = await audio_to_text(path)
