@@ -51,17 +51,14 @@ async def speech_to_text(message: Message, bot: Bot) -> Message:
         transcripted_voice_text = await audio_to_text(path)
     except (PermissionError, json.decoder.JSONDecodeError,
             APIError, OpenAIError, Exception) as error:
-        transcripted_voice_text = None
-        message_error = error
         logging.error(error)
-
-    if transcripted_voice_text:
-        await send_text(transcripted_voice_text, message, bot)
-    else:
         await message.reply(
             text=f'Расшифровать голосовое сообщение не удалось. '
-            f'Ошибка: {message_error}'
+            f'Ошибка: {error}'
         )
+        return
+
+    await send_text(transcripted_voice_text, message, bot)
 
     try:
         os.remove(f'{path}')
