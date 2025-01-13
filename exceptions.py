@@ -20,3 +20,7 @@ class CustomPermissionError(Exception):
 
 class CustomValueError(Exception):
     pass
+
+
+class TooBigFile(Exception):
+    pass
