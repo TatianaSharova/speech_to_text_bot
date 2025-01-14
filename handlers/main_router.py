@@ -9,7 +9,7 @@ from config import logging
 from exceptions import FileNotFoundInSavedFilesDir, TooBigFile
 
 from .audio_file import save_audio_file
-from .transcribation import audio_to_text
+from .transcribation import audio_to_text, process_audio_for_transcription
 from .utils import send_text
 from .video_note import get_audio_from_video_note
 from .voice import save_voice_as_mp3
@@ -42,23 +42,26 @@ async def speech_to_text(message: Message, bot: Bot) -> Message:
             path = await save_audio_file(bot, message.audio)
     except TooBigFile as error:
         await message.reply(
-            text=f'Расшифровать голосовое сообщение не удалось. '
+            text=f'Расшифровать аудио не удалось.\n'
             f'Ошибка: {error}'
         )
         return
 
-    try:
-        transcripted_voice_text = await audio_to_text(path)
-    except (PermissionError, json.decoder.JSONDecodeError,
-            APIError, OpenAIError, Exception) as error:
-        logging.error(error)
-        await message.reply(
-            text=f'Расшифровать голосовое сообщение не удалось. '
-            f'Ошибка: {error}'
-        )
-        return
+    result = await process_audio_for_transcription(path)
+    await send_text(result, message, bot)
 
-    await send_text(transcripted_voice_text, message, bot)
+    # try:
+    #     transcripted_voice_text = await audio_to_text(path)
+    # except (PermissionError, json.decoder.JSONDecodeError,
+    #         APIError, OpenAIError, Exception) as error:
+    #     logging.error(error)
+    #     await message.reply(
+    #         text=f'Расшифровать аудио не удалось.\n'
+    #         f'Ошибка: {error}'
+    #     )
+    #     return
+
+    # await send_text(transcripted_voice_text, message, bot)
 
     try:
         os.remove(f'{path}')
