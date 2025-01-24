@@ -7,7 +7,7 @@
 Бот может работать с файлами, которые весят меньше 20 МБ из-за ограничений TelegramAPI.
 Если ответ будет слишком большим, бот пришлет текст ответа в файле txt.
 
-**Stack**: Python, Pytest, Aiogram, Asyncio, pydub, Whisper, Github Actions, Heroku.
+**Stack**: Python, Pytest, Aiogram, Asyncio, aiohttp, pydub, Whisper, Github Actions, Heroku.
 
 Настроен CI проекта в GitHub Actions: код проверяется по стандарту PEP8, и выполняются Pytest тесты на проверку доступа к API OpenAI.
 CD бота настроен на Heroku.
